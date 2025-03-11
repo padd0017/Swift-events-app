@@ -8,7 +8,7 @@
 import Foundation
 
 
-class DataStorage: ObservableObject {
+class DataStore: ObservableObject {
     @Published var events: [Event] = [.sample]
     @Published var host: Host = .sample
     

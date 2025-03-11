@@ -9,9 +9,11 @@ import SwiftUI
 
 @main
 struct eventsAppApp: App {
+    @StateObject private var dataStore = DataStorage()
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environmentObject(dataStore)
         }
     }
 }
