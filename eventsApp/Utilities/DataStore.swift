@@ -16,6 +16,7 @@ class DataStore: ObservableObject {
     
     func addEvent(_ event: Event) {
         events.append(event)
+        print("DataStore: ", events)
     }
     
     func deleteEvent(_ event: Event){

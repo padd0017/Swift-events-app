@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Foundation
 
 struct CreateEventView: View {
     @EnvironmentObject var datastore: DataStore
@@ -32,15 +33,14 @@ struct CreateEventView: View {
                         Section(header: Text("New Event")
                             .font(.headline)
                             .fontWeight(.bold)
+                            .foregroundStyle(.white)
                         ) {
                             TextField("Event Title", text: $createEvent.name)
                                 .padding()
                                 .font(.subheadline)
-                                .fontWeight(.bold)
                             TextField("Event Location", text: $createEvent.location)
                                 .padding()
                                 .font(.subheadline)
-                                .fontWeight(.bold)
                             DatePicker("Event Start Date",
                                        selection: $createEvent.startDate, displayedComponents:.date)
                             DatePicker("Event End Date",
@@ -64,7 +64,6 @@ struct CreateEventView: View {
                         Button {
                             datastore.addEvent(createEvent)
                             dismiss()
-                            print( datastore.events)
                         } label: {
                             Text("Create Event")
                                 .font(.headline)
@@ -80,7 +79,16 @@ struct CreateEventView: View {
                     .background(Color.clear)
                 }
             }
-           
+            .onAppear {
+                createEvent = Event(
+                       name: "",
+                       startDate: Date(),
+                       endDate: Date(),
+                       location: "",
+                       note: "",
+                       attendees: []
+                   )
+            }
         }
     }
 }
