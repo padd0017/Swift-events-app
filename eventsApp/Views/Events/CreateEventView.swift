@@ -64,7 +64,7 @@ struct CreateEventView: View {
                         Button {
                             datastore.addEvent(createEvent)
                             dismiss()
-                            print(datastore.addEvent(createEvent))
+                            print( datastore.events)
                         } label: {
                             Text("Create Event")
                                 .font(.headline)
