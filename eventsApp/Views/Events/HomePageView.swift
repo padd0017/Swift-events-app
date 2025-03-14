@@ -12,11 +12,7 @@ struct HomePageView: View {
     var body: some View {
         NavigationView{
             ZStack{
-                LinearGradient(gradient: Gradient(
-                    colors: [ .brown, .red, .white]),
-                    startPoint: .topLeading,
-                    endPoint: .bottomTrailing)
-                .ignoresSafeArea(edges: .all)
+                BackgroundView()
                 
                 
                 VStack(spacing: 100) {

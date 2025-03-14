@@ -2,11 +2,10 @@ import SwiftUI
 
 struct EventsListView: View {
     @EnvironmentObject var dataStore: DataStore
+    @State private var selectedEvent: Event? 
     
     var upcomingEvents: [Event] {
-       let filtered = dataStore.events.filter { $0.startDate > Date() }
-//        print("Upcoming event: ", filtered)
-        return filtered
+      dataStore.events.filter { $0.startDate > Date() }
     }
     
     var pastEvents: [Event] {
@@ -16,13 +15,8 @@ struct EventsListView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                LinearGradient(gradient: Gradient(
-                    colors: [.brown, .red, .white]),
-                               startPoint: .topLeading,
-                               endPoint: .bottomTrailing)
-                    .ignoresSafeArea(edges: .all)
+                BackgroundView()
                 
-                VStack(alignment: .center) {
                     List {
                         
                         // Upcoming events
@@ -36,19 +30,10 @@ struct EventsListView: View {
                                     .foregroundStyle(.red)
                             } else {
                                 ForEach(upcomingEvents, id: \.id) { event in
-                                    HStack {
-                                        NavigationLink(destination: EventDetailView(event: event)) {
-                                                EventRowView(event: event)
+                                    if let index = dataStore.events.firstIndex(where: { $0.id == event.id }) {
+                                        NavigationLink(destination: EventDetailView(event: $dataStore.events[index])) {
+                                            EventRowView(event: event)
                                         }
-                                        Spacer()
-                                        // Delete Button
-//                                        Button(action: {
-//                                            dataStore.deleteEvent(event)
-//                                        }) {
-//                                            Image(systemName: "trash")
-//                                                .foregroundColor(.red)
-//                                        }
-//                                        .padding(.trailing, 10) // Add some padding to the button
                                     }
                                 }
                             }
@@ -67,8 +52,8 @@ struct EventsListView: View {
                             
                             } else {
                                 ForEach(pastEvents, id: \.id) { event in
-                                    HStack{
-                                        NavigationLink(destination: EventDetailView(event: event)) {
+                                    if let index = dataStore.events.firstIndex(where: { $0.id == event.id }) {
+                                        NavigationLink(destination: EventDetailView(event: $dataStore.events[index])) {
                                             EventRowView(event: event)
                                         }
                                     }
@@ -78,13 +63,11 @@ struct EventsListView: View {
                     }
                   
                     .scrollContentBackground(.hidden)
-                }
             }
         }
     }
 }
 
+
+
         
-
-
-
