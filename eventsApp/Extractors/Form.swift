@@ -61,9 +61,9 @@ struct EventForm: View {
                                            Button(action: {
                                                if !firstName.isEmpty  && !lastName.isEmpty {
                                                    event.attendees.append(Attendee(
-                                                       id: UUID(),
                                                        firstName: firstName,
                                                        lastName: lastName,
+                                                       avatar: "",
                                                        isHost: false
                                                ))
                                                    firstName = ""
@@ -83,7 +83,10 @@ struct EventForm: View {
                                            }
                                        }
                                        
-                                   } //Section attendeee
+                                   }
+                                   .listRowBackground(
+                                           RoundedRectangle(cornerRadius: 0)
+                                               .fill(.thinMaterial))//Section attendeee
     }  //form
         .scrollContentBackground(.hidden)
         .background(Color.clear)

@@ -30,7 +30,7 @@ struct EventEditView: View  {
                         } label: {
                             Text(" Save")
                                 .font(.headline)
-                                .foregroundStyle(.white)
+                                .foregroundStyle(.black)
                                 .frame(maxWidth: .infinity, minHeight: 50)
                         }
                         .listRowBackground(

@@ -13,7 +13,6 @@ class DataStore: ObservableObject {
     @Published var host: Host = .sample
     
     
-    
     func addEvent(_ event: Event) {
         events.append(event)
         print("DataStore: ", events)
