@@ -12,8 +12,9 @@ struct EventDetailView: View  {
     @EnvironmentObject var dataStore: DataStore
     @Environment(\.dismiss) var dismiss
     @Binding var event: Event
-
     
+    @State private var firstName: String = ""
+    @State private var lastName: String = ""
     
     var body: some View {
         ZStack {
@@ -37,13 +38,11 @@ struct EventDetailView: View  {
                                    selection: $event.startDate, displayedComponents:.date)
                         DatePicker("Event End Date",
                                    selection: $event.endDate, displayedComponents: .date)
-                        
-                        
                     }
-                        .listRowBackground(
-                            RoundedRectangle(cornerRadius: 0)
-                                .fill(.thinMaterial))
-                   
+                    .listRowBackground(
+                        RoundedRectangle(cornerRadius: 0)
+                            .fill(.thinMaterial))
+                    
                     
                     
                     Section {
@@ -55,22 +54,68 @@ struct EventDetailView: View  {
                         RoundedRectangle(cornerRadius: 10)
                             .fill(.thinMaterial))
                     
-                    Button {
-                        dismiss()
-                    } label: {
-                        Text(" Save")
-                            .font(.headline)
-                            .foregroundStyle(.white)
-                            .frame(maxWidth: .infinity, minHeight: 50)
+                    
+                    Section(header: Text("Add an attendee")
+                        .font(.headline)
+                        .fontWeight(.bold)
+                        .foregroundStyle(.white)
+                    ){
+                        HStack {
+                            TextField("First Name", text: $firstName)
+                            TextField("last Name", text: $lastName)
+                            
+                            Button(action: {
+                                if !firstName.isEmpty  && !lastName.isEmpty {
+                                    event.attendees.append(Attendee(
+                                        id: UUID(),
+                                        firstName: firstName,
+                                        lastName: lastName,
+                                        isHost: false
+                                    ))
+                                    firstName = ""
+                                    lastName = ""
+                                }
+                            }){
+                                Text("Add")
+                            }
+                        }
+                        
+                        
+                        Button {
+                            dismiss()
+                        } label: {
+                            Text(" Save")
+                                .font(.headline)
+                                .foregroundStyle(.white)
+                                .frame(maxWidth: .infinity, minHeight: 50)
+                        }
+                        .listRowBackground(
+                            RoundedRectangle(cornerRadius: 10)
+                                .fill(Color.black.opacity(0.2))
+                                .padding(.vertical, 4))
+                        
+                        Button {
+                            dataStore.deleteEvent(event)
+                            dismiss()
+                            
+                        } label: {
+                            Text("Cancel")
+                                .font(.headline)
+                                .foregroundStyle(.white)
+                                .frame(maxWidth: .infinity, minHeight: 50)
+                            
+                        }
+                        .listRowBackground(
+                            RoundedRectangle(cornerRadius: 10)
+                                .fill(Color.red)
+                                .padding(.vertical, 4))
+                        
                     }
-                    .listRowBackground(
-                        RoundedRectangle(cornerRadius: 10)
-                            .fill(Color.black.opacity(0.2))
-                            .padding(.vertical, 4))
+                    .scrollContentBackground(.hidden)
+                    .background(Color.clear)
                 }
-                .scrollContentBackground(.hidden)
-                .background(Color.clear)
             }
         }
+        
     }
 }

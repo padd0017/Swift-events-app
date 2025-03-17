@@ -19,6 +19,11 @@ struct CreateEventView: View {
         note: "",
         attendees: []
     )
+    
+    @State private var firstName: String = ""
+      @State private var lastName: String = ""
+    
+    
     var body: some View {
         NavigationView {
             ZStack {
@@ -41,12 +46,11 @@ struct CreateEventView: View {
                                        selection: $createEvent.startDate, displayedComponents:.date)
                             DatePicker("Event End Date",
                                        selection: $createEvent.endDate, displayedComponents: .date)
-                            
-                            
                         }
                         .listRowBackground(
                                 RoundedRectangle(cornerRadius: 0)
                                     .fill(.thinMaterial))
+                        
                         
                         Section {
                             TextField("Add a Description",
@@ -56,6 +60,46 @@ struct CreateEventView: View {
                         .listRowBackground(
                                 RoundedRectangle(cornerRadius: 10)
                                     .fill(.thinMaterial))
+                        
+                        
+                        Section(header: Text("Add an attendee")
+                                    .font(.headline)
+                                    .fontWeight(.bold)
+                                    .foregroundStyle(.white)
+                        ){
+                            HStack {
+                                TextField("First Name", text: $firstName)
+                                TextField("last Name", text: $lastName)
+                                
+                                Button(action: {
+                                    if !firstName.isEmpty  && !lastName.isEmpty {
+                                        createEvent.attendees.append(Attendee(
+                                            id: UUID(),
+                                            firstName: firstName,
+                                            lastName: lastName,
+                                            isHost: false
+                                    ))
+                                        firstName = ""
+                                        lastName = ""
+                                    }
+                                }){
+                                    Text("Add")
+                                }
+                            }
+                            
+                            
+                            if !createEvent.attendees.isEmpty {
+                                ForEach($createEvent.attendees) {$attendee in
+                                    AttendeeRowView(attendee: $attendee) {
+                                               createEvent.attendees.removeAll { $0.id == attendee.id }
+                                           }
+                                }
+                            }
+                        }
+                            
+                        } //Section attendeee
+                        
+                        
                         
                         Button {
                             datastore.addEvent(createEvent)
@@ -70,7 +114,8 @@ struct CreateEventView: View {
                                 RoundedRectangle(cornerRadius: 10)
                                     .fill(Color.black.opacity(0.2))
                                 .padding(.vertical, 4))
-                    }
+                        
+                    }  //form
                     .scrollContentBackground(.hidden)
                     .background(Color.clear)
                 }
@@ -82,9 +127,11 @@ struct CreateEventView: View {
                        endDate: Date(),
                        location: "",
                        note: "",
-                       attendees: []
-                   )
-            }
+                       attendees: [])
+            }//onappear
         }
     }
-}
+
+
+
+
