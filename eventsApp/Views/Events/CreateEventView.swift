@@ -11,7 +11,7 @@ import Foundation
 struct CreateEventView: View {
     @EnvironmentObject var datastore: DataStore
     @Environment(\.dismiss) var dismiss 
-    @State var createEvent: Event = Event(
+    @State var event: Event = Event(
         name: "",
         startDate: Date(),
         endDate:  Date(),
@@ -36,16 +36,16 @@ struct CreateEventView: View {
                             .fontWeight(.bold)
                             .foregroundStyle(.white)
                         ) {
-                            TextField("Event Title", text: $createEvent.name)
+                            TextField("Event Title", text: $event.name)
                                 .padding()
                                 .font(.subheadline)
-                            TextField("Event Location", text: $createEvent.location)
+                            TextField("Event Location", text: $event.location)
                                 .padding()
                                 .font(.subheadline)
                             DatePicker("Event Start Date",
-                                       selection: $createEvent.startDate, displayedComponents:.date)
+                                       selection: $event.startDate, displayedComponents:.date)
                             DatePicker("Event End Date",
-                                       selection: $createEvent.endDate, displayedComponents: .date)
+                                       selection: $event.endDate, displayedComponents: .date)
                         }
                         .listRowBackground(
                                 RoundedRectangle(cornerRadius: 0)
@@ -54,7 +54,7 @@ struct CreateEventView: View {
                         
                         Section {
                             TextField("Add a Description",
-                                      text: $createEvent.note)
+                                      text: $event.note)
                                 .padding()
                         }
                         .listRowBackground(
@@ -63,57 +63,54 @@ struct CreateEventView: View {
                         
                         
                         Section(header: Text("Add an attendee")
-                                    .font(.headline)
-                                    .fontWeight(.bold)
-                                    .foregroundStyle(.white)
-                        ){
-                            HStack {
-                                TextField("First Name", text: $firstName)
-                                TextField("last Name", text: $lastName)
-                                
-                                Button(action: {
-                                    if !firstName.isEmpty  && !lastName.isEmpty {
-                                        createEvent.attendees.append(Attendee(
-                                            id: UUID(),
-                                            firstName: firstName,
-                                            lastName: lastName,
-                                            isHost: false
-                                    ))
-                                        firstName = ""
-                                        lastName = ""
-                                    }
-                                }){
-                                    Text("Add")
-                                }
-                            }
-                            
-                            
-                            if !createEvent.attendees.isEmpty {
-                                ForEach($createEvent.attendees) {$attendee in
-                                    AttendeeRowView(attendee: $attendee) {
-                                               createEvent.attendees.removeAll { $0.id == attendee.id }
-                                           }
-                                }
-                            }
-                        }
-                            
-                        } //Section attendeee
+                                                           .font(.headline)
+                                                           .fontWeight(.bold)
+                                                           .foregroundStyle(.white)
+                                               ){
+                                                   HStack {
+                                                       TextField("First Name", text: $firstName)
+                                                       TextField("last Name", text: $lastName)
+                                                       
+                                                       Button(action: {
+                                                           if !firstName.isEmpty  && !lastName.isEmpty {
+                                                               event.attendees.append(Attendee(
+                                                                   id: UUID(),
+                                                                   firstName: firstName,
+                                                                   lastName: lastName,
+                                                                   isHost: false
+                                                           ))
+                                                               firstName = ""
+                                                               lastName = ""
+                                                           }
+                                                       }){
+                                                           Text("Add")
+                                                       }
+                                                   }
+                                                   
+                                                   
+                                                   if !event.attendees.isEmpty {
+                                                       ForEach($event.attendees) {$attendee in
+                                                           AttendeeRowView(attendee: $attendee) {
+                                                                      event.attendees.removeAll { $0.id == attendee.id }
+                                                                  }
+                                                       }
+                                                   }
+                                               }
+                                                   
+                                               } //Section attendeee
                         
                         
                         
                         Button {
-                            datastore.addEvent(createEvent)
+                            datastore.addEvent(event)
                             dismiss()
                         } label: {
                             Text("Create Event")
                                 .font(.headline)
-                                .foregroundStyle(.white)
+                                .foregroundStyle(.black)
                                 .frame(maxWidth: .infinity, minHeight: 50)
                         }
-                        .listRowBackground(
-                                RoundedRectangle(cornerRadius: 10)
-                                    .fill(Color.black.opacity(0.2))
-                                .padding(.vertical, 4))
+                        .backgroundStyle(Color.white)
                         
                     }  //form
                     .scrollContentBackground(.hidden)
@@ -121,7 +118,7 @@ struct CreateEventView: View {
                 }
             }
             .onAppear {
-                createEvent = Event(
+                event = Event(
                        name: "",
                        startDate: Date(),
                        endDate: Date(),

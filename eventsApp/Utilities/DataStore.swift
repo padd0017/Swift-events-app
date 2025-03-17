@@ -19,6 +19,7 @@ class DataStore: ObservableObject {
         print("DataStore: ", events)
     }
     
+    
     func deleteEvent(_ event: Event){
         events.removeAll { $0.id == event.id }
     }
