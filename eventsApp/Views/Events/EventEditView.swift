@@ -13,8 +13,9 @@ struct EventEditView: View  {
     @Environment(\.dismiss) var dismiss
     @Binding var event: Event
     
-    @State private var firstName: String = ""
-    @State private var lastName: String = ""
+    var isValid: Bool {
+        event.name.isEmpty || event.location.isEmpty  || event.attendees.isEmpty
+    }
     
     var body: some View {
         ZStack {
@@ -25,20 +26,16 @@ struct EventEditView: View  {
    
                 EventForm(event: $event, isCreateForm: false)
                         
-                        Button {
+                Button (action: {
                             dismiss()
-                        } label: {
+                        }) {
                             Text(" Save")
                                 .font(.headline)
-                                .foregroundStyle(.black)
+                                .foregroundStyle(
+                                    isValid ?.black.opacity(0.2) : .black)
                                 .frame(maxWidth: .infinity, minHeight: 50)
                         }
-                        .listRowBackground(
-                            RoundedRectangle(cornerRadius: 10)
-                                .fill(Color.black.opacity(0.2))
-                                .padding(.vertical, 4))
-                        
-                   
+                        .disabled(isValid)
                 }
             }
         }

@@ -20,8 +20,9 @@ struct CreateEventView: View {
         attendees: []
     )
     
-    @State private var firstName: String = ""
-    @State private var lastName: String = ""
+    var isValid: Bool {
+        event.name.isEmpty || event.location.isEmpty  || event.attendees.isEmpty
+    }
     
     
     var body: some View {
@@ -32,17 +33,18 @@ struct CreateEventView: View {
                 VStack {
                     
                     EventForm(event: $event, isCreateForm: true)
-                    Button {
+                    Button (action: {
                         datastore.addEvent(event)
                         dismiss()
-                    } label: {
+                    }) {
                         Text("Create Event")
                             .font(.headline)
-                            .foregroundStyle(.black)
+                            .foregroundStyle(
+                                isValid ?.black.opacity(0.2) : .black)
                             .frame(maxWidth: .infinity, minHeight: 50)
+                        
                     }
-                    .backgroundStyle(Color.white)
-                    
+                    .disabled(isValid)
                     
                 }
             }

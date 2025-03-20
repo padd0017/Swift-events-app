@@ -21,9 +21,9 @@ struct EventDetailView: View {
                 Form {
                     // Event Details
                     Section(header: Text("Event Details")) {
-                        Text(event.name)
-                        Text(event.location)
-                        Text(event.note)
+                        Text("Name: \(event.name)")
+                        Text("Location:  \(event.location)")
+                        Text("Notes: \(event.note)")
                         DateText(date: event.startDate)
                         DateText(date: event.endDate)
                     }

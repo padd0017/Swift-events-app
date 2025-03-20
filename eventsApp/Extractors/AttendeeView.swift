@@ -31,6 +31,7 @@ struct AttendeeRowView: View {
                 Image(systemName: "trash")
                     .foregroundColor(.red)
             }
+            .buttonStyle(PlainButtonStyle()) 
         }
         .contentShape(Rectangle())
         .onTapGesture {}

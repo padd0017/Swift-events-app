@@ -15,6 +15,9 @@ struct EventForm: View {
     @State private var lastName: String = ""
     
     let isCreateForm: Bool
+    var isValid: Bool {
+        event.name.isEmpty || event.location.isEmpty
+    }
     
     var body: some View {
         Form {
@@ -31,15 +34,20 @@ struct EventForm: View {
                     .font(.subheadline)
                 DatePicker("Event Start Date",
                            selection: $event.startDate, displayedComponents:.date)
-                DatePicker("Event End Date",
-                           selection: $event.endDate, displayedComponents: .date)
+                DatePicker(
+                    "End Date",
+                    selection: $event.endDate, in: event.startDate..., displayedComponents: .date)
             }
             .listRowBackground(
                     RoundedRectangle(cornerRadius: 0)
                         .fill(.thinMaterial))
             
             
-            Section {
+            Section(header: Text("Description")
+                .font(.headline)
+                .fontWeight(.bold)
+                .foregroundStyle(.white)
+            ) {
                 TextField("Add a Description",
                           text: $event.note)
                     .padding()
@@ -78,8 +86,10 @@ struct EventForm: View {
                                        if !event.attendees.isEmpty {
                                            ForEach($event.attendees) {$attendee in
                                                AttendeeRowView(attendee: $attendee) {
-                                                          event.attendees.removeAll { $0.id == attendee.id }
-                                                      }
+                                                   if let index = event.attendees.firstIndex(where: {$0.id == attendee.id}) {
+                                                       event.attendees.removeAll { $0.id == attendee.id }
+                                                   }
+                                               }
                                            }
                                        }
                                        
